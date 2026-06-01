@@ -11,14 +11,14 @@ services:
     environment:
       MYSQL_DATABASE: alumnos_db
       MYSQL_USER: alumnos_user
-      MYSQL_PASSWORD: alumnos_pass
-      MYSQL_ROOT_PASSWORD: root_pass
+      MYSQL_PASSWORD: ${DB_PASSWORD:-alumnos_pass}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root_pass}
     ports:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_pass"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD:-root_pass}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -33,10 +33,10 @@ services:
       SPRING_PROFILES_ACTIVE: prod
       DB_URL: jdbc:mysql://mysql:3306/alumnos_db
       DB_USERNAME: alumnos_user
-      DB_PASSWORD: alumnos_pass
-      JWT_SECRET: clave-secreta-de-ejemplo-para-docker-cambiala-en-produccion-1234
+      DB_PASSWORD: ${DB_PASSWORD:-alumnos_pass}
+      JWT_SECRET: ${JWT_SECRET:-clave-secreta-de-ejemplo-para-docker-cambiala-en-produccion-1234}
       ADMIN_USERNAME: admin
-      ADMIN_PASSWORD: admin1234
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin1234}
     ports:
       - "8080:8080"
 

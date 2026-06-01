@@ -94,7 +94,7 @@ operación según el rol del usuario.
 - **Errores estandarizados** con `ProblemDetail` (RFC 7807).
 - **Observabilidad** con Spring Boot Actuator (`health`, `info`, `metrics`).
 - **Contenedorización** con Docker multi-stage y orquestación local con Docker
-  Compose, e **integración continua** con GitHub Actions.
+  Compose.
 
 ---
 
@@ -114,7 +114,7 @@ operación según el rol del usuario.
 | Observabilidad      | **Spring Boot Actuator**                                            |
 | Pruebas             | **JUnit 5** · **Mockito** · **MockMvc** · **H2** · **Testcontainers** |
 | Build               | **Maven** (con *wrapper*)                                           |
-| Contenedores / CI   | **Docker** · **Docker Compose** · **GitHub Actions**               |
+| Contenedores        | **Docker** · **Docker Compose**                                    |
 
 ---
 
@@ -199,7 +199,6 @@ ProyectoSpring/
 │
 ├── Dockerfile                       # build multi-stage (JDK → JRE)
 ├── docker-compose.yml               # API + MySQL
-├── .github/workflows/ci.yml         # integración continua (tests sobre H2)
 ├── .env.example                     # plantilla de variables de entorno
 └── pom.xml
 ```
@@ -442,10 +441,10 @@ La estrategia es **piramidal** y no depende de infraestructura externa (la suite
   de 401/403/201 de extremo a extremo.
 - **Testcontainers (MySQL):** un test de integración contra un **MySQL real** en
   Docker, que se **omite automáticamente** si Docker no está disponible (de modo que
-  el build no falla en máquinas sin Docker, pero sí se ejecuta en CI).
+  el build no falla en máquinas sin Docker y se ejecuta cuando Docker está presente).
 
-La **integración continua** (GitHub Actions) compila y ejecuta toda la suite en cada
-push y pull request.
+Toda la suite se compila y ejecuta en local con `./mvnw test`; no requiere
+infraestructura externa ni configuración adicional.
 
 ---
 
@@ -475,8 +474,7 @@ push y pull request.
   integración full-stack sobre H2 y un test con **Testcontainers** que se autodesactiva
   sin Docker — cobertura amplia sin acoplar el build a infraestructura externa.
 - **Listo para desplegar**: imagen **Docker multi-stage** (compila con JDK, ejecuta con
-  JRE y usuario no *root*), orquestación con **Docker Compose** (API + MySQL) e
-  **integración continua** con GitHub Actions.
+  JRE y usuario no *root*) y orquestación con **Docker Compose** (API + MySQL).
 
 ---
 
